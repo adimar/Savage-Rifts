@@ -168,12 +168,30 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <eval phase="PreTraits" priority="5000">~Agility +1 die Type
 #traitcreation[attrAgi] += 1</eval>
     </thing>
-  <thing id="fg5SL" name="Smart and Learned" description="Your hero adds one die type to Smarts and begins with a d6 in any three Smarts-linked skills." compset="Fortune" summary="Smarts +1 Die Type; d6 in three Smarts skills." uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <tag group="explicit" tag="5"/>
-    <eval phase="PreTraits" priority="5000">~Smarts +1 die Type
-#traitcreation[attrSma] += 1</eval>
-    </thing>
+    <thing id="fg5SL" name="Smart and Learned" description="Your hero adds one die type to Smarts and begins with a d6 in any three Smarts-linked skills." compset="Fortune" summary="Smarts +1 Die Type; d6 in three Smarts skills." uniqueness="unique">
+		<usesource source="SavRiftC"/>
+		<tag group="explicit" tag="5"/>
+		<eval phase="PreTraits" priority="5000">	
+			~Smarts +1 die Type
+			#traitcreation[attrSma] += 1
+			~+6 Skill Points
+			#resmax[resSkill] += 6
+		</eval>
+		<evalrule phase="Validate" priority="5000" message="Pick at least three Smarts-linked skills at d6" summary="Spend 5 Skill points on Healing, Investigation, and Knowledge skills.">
+				<![CDATA[
+		  var smartSkillCount as number
+		  smartSkillCount = 0
+
+		  foreach pick in hero where "thingid.skGambling|thingid.skHealing|thingid.skInvest|thingid.skKnow?|thingid.skNotice|thingid.skRepair|thingid.skStreet|thingid.skSurvival|thingid.skTaunt|thingid.skTracking"
+			if (eachpick.field[trtFinal].value >= 3) then
+			  smartSkillCount += 1
+			  endif
+			nexteach
+			
+		  validif (smartSkillCount >= 3)
+		]]></evalrule>
+
+  </thing>
   <thing id="fg6SD" name="Spiritual and Determined" description="Your hero adds one type to Spirit and begins with the Strong Willed Edge." compset="Fortune" summary="Spirit +1 Die Type; Strong Willed Edge" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="explicit" tag="6"/>
@@ -1189,7 +1207,7 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
 
       foreach pick in hero where "thingid.skClimbing|thingid.skLockpick|thingid.skStealth"
         if (eachpick.field[trtFinal].value >= 2) then
-          totalcount += (field[trtUser].value - 1)
+          totalcount += (eachpick.field[trtFinal].value-1)
           endif
         nexteach
 		
@@ -1380,6 +1398,24 @@ endif]]>
     <pickreq thing="racSFConst" ispreclude="yes"/>
     <pickreq thing="hinSFCybRe" ispreclude="yes"/>
     </thing>
+  	<thing id="edgSRUpgade" name="Upgrade" description="For those who embrace cybernetics as a part of their being (by choice or necessity), the desire to upgrade is often an all encompassing goal on its own. Taking this Edge—which may only be selected once per Rank—means the cybernetic hero manages to achieve the necessary resources and opportunity to have a new piece of cybernetic technology installed, or have one upgraded to a higher degree. Though the GM has final say on what is and is not appropriate, anything in the Cybernetics section is fair game otherwise." compset="Edge" summary="Add a new piece of cyberware of your choice">
+		<fieldval field="usrCandid1" value="component.Cyberware"/>
+		<usesource source="SavRiftC"/>
+		<tag group="ChooseSrc1" tag="Thing" name="All Things" abbrev="All Things"/>
+		<tag group="MinRank" tag="1" name="Seasoned" abbrev="Seasoned"/>
+		<tag group="EdgeType" tag="Iconic"/>
+		<eval phase="PreTraits" priority="5000"><![CDATA[
+			doneif (field[usrChosen1].ischosen = 0)
+			~NEED TO PROGRAMATICALLY ADD CYBER, But this is still usefull as an edge holder
+		  ]]>
+		  </eval>
+		<evalrule phase="Validate" priority="5000" message="May only be taken once per rank" summary="May only be taken once per rank">
+			<![CDATA[validif (herofield[acRank].value + 1 >= hero.tagcount[Edge.edgSRUpgade])]]></evalrule>
+		<exprreq message="Combat Cyborg or M.A.R.S. required.">
+			<![CDATA[(hero.tagcount[Group.grpSRCoCyb] + hero.tagcount[Rifts.MARS]) >= 1]]></exprreq>
+		<exprreq message="Seasoned required.">
+			<![CDATA[herofield[acRank].value >= 1]]></exprreq>
+	</thing>
   <thing id="edgSRBHard" name="Battle Hardened" description="The hero’s conditioning reflects the rigors of a martial career. He adds +2 to all Soak rolls." compset="Edge" summary="+2 to Soak rolls." uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="1" name="Seasoned" abbrev="Seasoned"/>
@@ -2320,12 +2356,14 @@ foreach pick in hero where "Skill.skKnow & Rifts.TKnoSkill"
   <thing id="rpSRDistDB" name="Distinctive D-Bee" description="With an inhuman appearance, the race faces prejudice from the Coalition. They suffer a −4 Charisma when dealing with Coalition." compset="RacialProp" summary="−4 Cha when dealing with Coalition." uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="User" tag="Activation"/>
+    <!--this was disabled because charisma penalty is only valid for coalition not a general thing-->
+    <!--
     <eval phase="PreTraits" priority="5000"><![CDATA[
       if (field[abilActive].value <> 0) then
         perform #traitadjust[trCharisma,-,4,"Distinctive D-Bee"]
         endif]]>
       <before name="Calc trtFinal"/>
-      </eval>
+      </eval>-->
     </thing>
   <thing id="grpSRCoCyb" name="Combat Cyborg" description="{b}{i}THE COMBAT CYBORG HERO’S JOURNEY (THREE ROLLS){/b}{/i}\n\n‘Borgs gain two rolls on any of the following tables:  {b}Cybernetics, Close Combat Weapons, Ranged Weapons, {/b}and {b}Training{/b}. \n\nThey gain a third roll on any table except those dealing with magic, psionics, or {b}Body Armor{/b}." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2570,38 +2608,51 @@ perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
     <evalrule phase="Final" priority="1000" message="Must have 4 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 4)]]></evalrule>
     </thing>
-  <thing id="grpSRMarsC" name="M.A.R.S. (Cybernetic Techno-Warrior)" description="Also called a Headhunter and usually operating as a mercenary, heavily focused on improving his value via cybernetics.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="Headhunter"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Rifts" tag="MARS"/>
-    <bootstrap thing="edgSRUpgra">
-      <autotag group="thing" tag="skipprereq"/>
-      </bootstrap>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortuneAndGlory]
-perform hero.assign[Rifts.MARS]
-#resmax[resFortune] += 3</eval>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4
 
-~set resFraSel1
-#resmax[resFraSel1] += 1</eval>
-    <eval phase="Render" priority="10000"><![CDATA[var header as string
-var chooser as string
-var additem as string
+	<thing id="grpSRMarsC" name="M.A.R.S. (Cybernetic Techno-Warrior)" description="Also called a Headhunter and usually operating as a mercenary, heavily focused on improving his value via cybernetics.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+		<fieldval field="shortname" value="Headhunter"/>
+		<usesource source="SavRiftC"/>
+		<tag group="Rifts" tag="MARS"/>
+		<bootstrap thing="edgSRUpgra">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<bootstrap thing="faSRCyber6"/>
+		<eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+			perform hero.assign[Rifts.FortuneAndGlory]
+			perform hero.assign[Rifts.MARS]
+			#resmax[resFortune] += 3
+		</eval>
+		<eval phase="PreTraits" priority="5000" index="3">
+			#resmax[resXP] += 20
+			#resmax[resAdvance] +=4
 
-additem = "Add Gear"
-header = "Gear: "
-header &= hero.child[resFraSel1].field[resSummary].text
+			~set resFraSel1
+			#resmax[resFraSel1] += 1
+		</eval>
+		<eval phase="Render" priority="10000">
+			<![CDATA[
+			var header as string
+			var chooser as string
+			var additem as string
 
-chooser = "component.Edge & Rifts.StartGear & Rifts.HHEquip"
+			additem = "Add Gear"
+			header = "Starting Gear: "
+			header &= hero.child[resFraSel1].field[resSummary].text
 
-~set up chooser expressions
-hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
-hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
-hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
-    <evalrule phase="Final" priority="1000" message="Must have 6 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 6)]]></evalrule>
-    </thing>
+			chooser = "component.Edge & Rifts.StartGear & Rifts.HHEquip"
+
+			~set up chooser expressions
+			hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+			hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+			hero.child[ehExprHlp1].field[ehFrameHdr].text = header
+		]]>
+		</eval>
+		<evalrule phase="Final" priority="1000" message="Must have 6 Strain worth of Cybernetics.">
+		<![CDATA[
+			validif (#resleft[resFraStrain] = 0)
+		]]></evalrule>
+	</thing>	
+	
   <thing id="grpSRMarsD" name="M.A.R.S. (Merc Soldier)" description="Though they like to be paid, it’s not always about the money. This package also applies to anyone with a strong military or security background.\n\nNOTES:  When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
@@ -4746,6 +4797,9 @@ validif (rolls = 0)]]></evalrule>
     <fieldval field="shortname" value="Extra Arms"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
+	<eval phase="PreTraits" priority="5000">
+	   <![CDATA[herofield[acHands].value += 2]]>
+	</eval>
     </thing>
   <thing id="cybSRAdren" name="Adrenal System" description="This bio-enhancement of the internal adrenal network grants a +2 to recover from Shaken (which stacks with Combat Reflexes). Doesn’t work for Full Conversion Cyborgs." compset="Cyberware">
     <fieldval field="grDupMax" value="1"/>
@@ -4755,7 +4809,7 @@ validif (rolls = 0)]]></evalrule>
     <tag group="Equipment" tag="StdCyber"/>
     <tag group="RiftCyCat" tag="BioRep"/>
     </thing>
-  <thing id="cybSRArmP" name="Armor Plating" description="The same materials used to create worn armor can be directly attached to a cyborg’s frame for added protection. Each application adds +4 M.D.C. Armor." compset="Cyberware">
+  <thing id="cybSRArmP" name="Armor Plating" description="The same materials used to create worn armor can be directly attached to a cyborg’s frame for added protection. Each application adds +4 M.D.C. Armor." compset="Cyberware"  stacking="merge">
     <fieldval field="grCost" value="40000"/>
     <fieldval field="grDupMax" value="3"/>
     <fieldval field="cybStrain" value="1"/>
@@ -4764,7 +4818,11 @@ validif (rolls = 0)]]></evalrule>
     <eval phase="Effects">herofield[acDefHead].value += 4
 herofield[acDefArms].value += 4
 herofield[acDefLegs].value += 4
-herofield[acDefTorso].value += 4</eval>
+herofield[acDefTorso].value += 4
+	</eval>
+	<exprreq message="Over maximum number of duplicates">
+		<![CDATA[hero.tagcount[Cyberware.cybSRArmP]<= 3]]>
+	</exprreq>
     </thing>
   <thing id="cybSRBiStA" name="Bionic Strength Augmentation" description="Fully bionic arms and legs, reinforced artificial musculature, and other techniques raise the cyborg’s Strength. Each step past d12 adds a +1." compset="Cyberware" summary="Strength +1 Step" stacking="merge">
     <fieldval field="cybStrain" value="1"/>
@@ -4871,6 +4929,9 @@ hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     <fieldval field="grDupMax" value="1"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
+	<eval phase="PreTraits" priority="5000">
+		<![CDATA[perform #traitroll[skShooting,+,2,"Targeting Eye"]]]>
+	</eval>
     <exprreq message="Optics Package required."><![CDATA[hero.tagcount[Cyberware.cybSROptiP] >= 1]]></exprreq>
     </thing>
   <thing id="cybSRAudiP" name="Audio Package" description="Ear canal replacements, embedded speakers and microphones, and a number of other enhancements give the cyborg an array of listening and projection options—+2 to hearing-based Notice checks; hyper-sonic and sub-sonic ranges to his hearing; a loudspeaker capable of projecting audio over a 100-yard radius; automatic sound dampeners that give a +2 to resist any audio-based attacks or deafening effects. Finally, the audio package allows sounds and conversations to be recorded and played back later." compset="Cyberware">
@@ -4898,6 +4959,12 @@ hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     <fieldval field="grCost" value="33000"/>
     <fieldval field="cybStrain" value="2"/>
     <usesource source="SavRiftC"/>
+	<bootstrap thing="edgDangSen">
+		<autotag group="thing" tag="skipprereq"/>
+	</bootstrap>
+	<eval phase="PreTraits" priority="5000">
+		<![CDATA[perform #traitroll[skNotice,+,2,"Expanded Detection and Security Array"]]]>
+	</eval>
     </thing>
   <thing id="cybSRLangT" name="Language Translator" description="Providing translation of known languages at a d12+2 skill level, the system can also learn new languages over time. Each day, roll a d6; on a 4+, the language is acquired at a d4 and can be further improved over time." compset="Cyberware">
     <fieldval field="grDupMax" value="1"/>
@@ -9253,6 +9320,33 @@ hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
 hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
 hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
     </thing>
+	
+	<thing id="faSRCyber6" name="Select cybernetic systems" description="Select cybernetic systems up to 6 total Strain." compset="FraAbility" summary="Select cybernetic systems.">
+		<usesource source="SavRiftC"/>
+		<eval phase="PreTraits" priority="5000" index="3">
+			~set resFraStrain to selection
+			#resmax[resFraStrain] += 6
+		</eval>
+		<eval phase="Render" priority="10000">
+			<![CDATA[
+				var header as string
+				var chooser as string
+				var additem as string
+
+				additem = "Add Cybernetic systems"
+				header = "Cybernetic strain: "
+				header &= hero.child[resFraStrain].field[resSummary].text
+
+				chooser = "component.Cyberware"
+
+				~set up chooser expressions for Breed Advantages
+				hero.child[ehExprHlp3].field[ehFrameAdd].text = additem
+				hero.child[ehExprHlp3].field[ehFrameExp].text = chooser
+				hero.child[ehExprHlp3].field[ehFrameHdr].text = header]]>
+		</eval>
+	</thing>
+	
+	
   <thing id="faSRSelRA" name="Selected Robot Armor" description="Select any one suit of Robot Armor." compset="FraAbility">
     <usesource source="SavRiftC"/>
     <eval phase="PreTraits" priority="5000">~set resFraSel1 to selection

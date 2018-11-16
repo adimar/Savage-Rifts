@@ -271,15 +271,20 @@
 	if (myComp = 1) then
 		foreach pick in hero where "Rifts.FrameSel1"
 			myCount += 1
-			nexteach
-	
+		nexteach
 		perform #resspent[resFraSel1,+,myCount,field[name].text]
+		
 	elseif (myComp = 2) then
 		foreach pick in hero where "Rifts.FrameSel2"
 			myCount += 1
 			nexteach
-	
 		perform #resspent[resFraSel2,+,myCount,field[name].text]
+		
+	elseif (myComp = 3) then
+		foreach pick in hero where "Rifts.FrameStrain" 
+			myCount += eachpick.field[cybStrain].value
+		nexteach
+		perform #resspent[resFraStrain,+,myCount,field[name].text]
 	endif
 
 		]]></eval>

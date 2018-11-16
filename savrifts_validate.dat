@@ -51,7 +51,7 @@
     <evalrule index="1" phase="Validate" priority="8000" message="Selections required." summary="Issue with Framework options."><![CDATA[
 
       validif (#resleft[resFraSel1] = 0)
-
+      validif (#resleft[resFraStrain] = 0)
       ~mark associated tabs as invalid
       container.panelvalid[framework] = 0
 	  

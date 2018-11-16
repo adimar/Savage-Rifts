@@ -27,7 +27,16 @@
     <tag group="Helper" tag="Bootstrap"/>
 
     </thing>
-	
+
+	<!-- used for headhunter free cyber -->
+	<thing
+    id="ehExprHlp3"
+    name="Expression Helper"
+    compset="ExprHelp">
+		<!-- Automatically add the helper to every actor -->
+		<tag group="Helper" tag="Bootstrap"/>
+
+	</thing>	
   <!-- Racial - Bonus Abilities resource  -->
   <thing
     id="resRaceSel"
@@ -61,6 +70,12 @@
     <!-- Automatically add the resource to every actor -->
     <tag group="Helper" tag="Bootstrap"/>
 	
+    </thing>
+	
+	<thing id="resFraStrain" name="Headhunter Starting Strain" compset="Resource">
+		<fieldval field="resMax" value="0"/>
+		<!-- Automatically add the resource to every actor -->
+		<tag group="Helper" tag="Bootstrap"/>
     </thing>
   <!-- Hero's Journey - Bonus Abilities resource  -->
   <thing

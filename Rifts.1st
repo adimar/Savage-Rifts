@@ -6,7 +6,12 @@
 -->
 
 <document signature="Hero Lab Structure">
-  <!-- TCA: Tags specific to Rifts -->
+  <!-- TCA: Tags specific to Rifts --> 
+  <group id="cybChooseSrc1" visible="no">
+    <value id="Thing" name="All Things"/>
+    <value id="Container" name="All Picks on Container"/>
+    <value id="Hero" name="All Picks on Hero"/>
+    </group>
 
   <group
     id="BreedAdv">
@@ -38,7 +43,8 @@
     <value id="BonusRaceEdge"/>       <!-- Bonus Racial Edge -->     
     <value id="BonusRaceHind"/>  <!-- Bonus Racial Hindrance -->     
     <value id="FrameSel1"/>           <!-- Framework Ability selected through Helper 1--> 
-    <value id="FrameSel2"/>           <!-- Framework Ability selected through Helper 2-->    
+    <value id="FrameSel2"/>           <!-- Framework Ability selected through Helper 2-->
+    <value id="FrameStrain"/>         <!-- Headhunter Ability selected through Helper 3--> 	
     <value id="HeroJourneySel"/> <!-- Hero's Journey option selected through Helper -->     
     <value id="TKnoSkill"/>           <!-- Tag for selected Tramadore Knowledge Skill -->     
     <value id="SpellSkill"/>          <!-- Tag the Hero's Spellcasting skill -->   
