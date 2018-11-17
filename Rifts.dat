@@ -2589,6 +2589,7 @@ hero.childfound[resSkill].field[resSpent].value -= 3</eval>
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="skStreet"></bootstrap>
+    <bootstrap thing="faSRFrameCyber"/>
     <bootstrap thing="edgSRScrou">
       <autotag group="thing" tag="skipprereq"/>
       </bootstrap>
@@ -2606,6 +2607,10 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
 perform hero.assign[Rifts.FortuneAndGlory]
 perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
+		<eval phase="PreTraits" priority="5000" index="4">
+			~set resFraStrain to selection
+			#resmax[resFraStrain] += 4
+		</eval>
     <evalrule phase="Final" priority="1000" message="Must have 4 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 4)]]></evalrule>
     </thing>
 
@@ -2616,7 +2621,11 @@ perform hero.assign[Rifts.MARS]
 		<bootstrap thing="edgSRUpgra">
 			<autotag group="thing" tag="skipprereq"/>
 		</bootstrap>
-		<bootstrap thing="faSRCyber6"/>
+		<bootstrap thing="faSRFrameCyber"/>
+		<eval phase="PreTraits" priority="5000" index="4">
+			~set resFraStrain to selection
+			#resmax[resFraStrain] += 6
+		</eval>
 		<eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
 			perform hero.assign[Rifts.FortuneAndGlory]
 			perform hero.assign[Rifts.MARS]
@@ -9321,12 +9330,8 @@ hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
 hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
     </thing>
 	
-	<thing id="faSRCyber6" name="Select cybernetic systems" description="Select cybernetic systems up to 6 total Strain." compset="FraAbility" summary="Select cybernetic systems.">
+	<thing id="faSRFrameCyber" name="Select cybernetic systems" description="Select cybernetic systems up to alloted Strain." compset="FraAbility" summary="Select cybernetic systems.">
 		<usesource source="SavRiftC"/>
-		<eval phase="PreTraits" priority="5000" index="3">
-			~set resFraStrain to selection
-			#resmax[resFraStrain] += 6
-		</eval>
 		<eval phase="Render" priority="10000">
 			<![CDATA[
 				var header as string

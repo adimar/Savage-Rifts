@@ -952,6 +952,7 @@
       ~Note: All freezing must be done *before* any positioning is performed.
       if (state.iscreate = 0) then
         portal[fraAbility].freeze = 1
+        portal[fraChsTblCyber].freeze = 1
         endif
 
       portal[fraAbility].visible = 1
