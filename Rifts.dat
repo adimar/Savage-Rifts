@@ -1411,8 +1411,8 @@ endif]]>
 		  </eval>
 		<evalrule phase="Validate" priority="5000" message="May only be taken once per rank" summary="May only be taken once per rank">
 			<![CDATA[validif (herofield[acRank].value + 1 >= hero.tagcount[Edge.edgSRUpgade])]]></evalrule>
-		<exprreq message="Combat Cyborg or M.A.R.S. required.">
-			<![CDATA[(hero.tagcount[Group.grpSRCoCyb] + hero.tagcount[Rifts.MARS]) >= 1]]></exprreq>
+		<exprreq message="Combat Cyborg or M.A.R.S. CTW required.">
+			<![CDATA[(hero.tagcount[Group.grpSRCoCyb] + hero.tagcount[Group.grpSRMarsC]) >= 1]]></exprreq>
 		<exprreq message="Seasoned required.">
 			<![CDATA[herofield[acRank].value >= 1]]></exprreq>
 	</thing>
