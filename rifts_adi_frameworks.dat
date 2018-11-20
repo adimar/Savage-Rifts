@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+	<!-- TCA: Tags specific to Rifts --> 
+	
+  <thing id="grpSRMarsB" name="M.A.R.S. (City Rat)" description="Masters of the urban sprawls that represent civilization in the new world, City Rats also take pride in whatever cybernetics they manage to get installed.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <tag group="Rifts" tag="MARS"/>
+    <bootstrap thing="skStreet"></bootstrap>
+    <bootstrap thing="faSRFrameCyber"/>
+    <bootstrap thing="edgSRScrou">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
+    <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
+    <eval phase="PreTraits" priority="5000">~Streetwise d6
+#traitcreation[skStreet] += 1
+hero.childfound[resSkill].field[resSpent].value -= 1</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortuneAndGlory]
+perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
+		<eval phase="PreTraits" priority="5000" index="4">
+			~set resFraStrain to selection
+			#resmax[resFraStrain] += 4
+		</eval>
+    <evalrule phase="Final" priority="1000" message="Must have 4 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 4)]]></evalrule>
+    </thing>
+
+	<thing id="grpSRMarsC" name="M.A.R.S. (Cybernetic Techno-Warrior)" description="Also called a Headhunter and usually operating as a mercenary, heavily focused on improving his value via cybernetics.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+		<fieldval field="shortname" value="Headhunter"/>
+		<usesource source="SavRiftC"/>
+		<tag group="Rifts" tag="MARS"/>
+		<bootstrap thing="edgSRUpgra">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<bootstrap thing="faSRFrameCyber"/>
+		<eval phase="PreTraits" priority="5000" index="4">
+			~set resFraStrain to selection
+			#resmax[resFraStrain] += 6
+		</eval>
+		<eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+			perform hero.assign[Rifts.FortuneAndGlory]
+			perform hero.assign[Rifts.MARS]
+			#resmax[resFortune] += 3
+		</eval>
+		<eval phase="PreTraits" priority="5000" index="3">
+			#resmax[resXP] += 20
+			#resmax[resAdvance] +=4
+
+			~set resFraSel1
+			#resmax[resFraSel1] += 1
+		</eval>
+		<eval phase="Render" priority="10000">
+			<![CDATA[
+			var header as string
+			var chooser as string
+			var additem as string
+
+			additem = "Add Gear"
+			header = "Starting Gear: "
+			header &= hero.child[resFraSel1].field[resSummary].text
+
+			chooser = "component.Edge & Rifts.StartGear & Rifts.HHEquip"
+
+			~set up chooser expressions
+			hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+			hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+			hero.child[ehExprHlp1].field[ehFrameHdr].text = header
+		]]>
+		</eval>
+		<evalrule phase="Final" priority="1000" message="Must have 6 Strain worth of Cybernetics.">
+		<![CDATA[
+			validif (#resleft[resFraStrain] = 0)
+		]]></evalrule>
+	</thing>	
+		
+
+	<thing id="faSRFrameCyber" name="Select cybernetic systems" description="Select cybernetic systems up to alloted Strain." compset="FraAbility" summary="Select cybernetic systems.">
+		<usesource source="SavRiftC"/>
+		<eval phase="Render" priority="10000">
+			<![CDATA[
+				var header as string
+				var chooser as string
+				var additem as string
+
+				additem = "Add Cybernetic systems"
+				header = "Cybernetic strain: "
+				header &= hero.child[resFraStrain].field[resSummary].text
+
+				chooser = "component.Cyberware"
+
+				~set up chooser expressions for Breed Advantages
+				hero.child[ehExprHlp3].field[ehFrameAdd].text = additem
+				hero.child[ehExprHlp3].field[ehFrameExp].text = chooser
+				hero.child[ehExprHlp3].field[ehFrameHdr].text = header]]>
+		</eval>
+	</thing>		
+</document>

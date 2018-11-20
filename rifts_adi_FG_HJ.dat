@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+	<!-- TCA: Tags specific to Rifts --> 
+	<thing id="fg5SL" name="Smart and Learned" description="Your hero adds one die type to Smarts and begins with a d6 in any three Smarts-linked skills." compset="Fortune" summary="Smarts +1 Die Type; d6 in three Smarts skills." uniqueness="unique">
+		<usesource source="SavRiftC"/>
+		<tag group="explicit" tag="5"/>
+		<eval phase="PreTraits" priority="5000">	
+			~Smarts +1 die Type
+			#traitcreation[attrSma] += 1
+			~+6 Skill Points
+			#resmax[resSkill] += 6
+		</eval>
+		<evalrule phase="Validate" priority="5000" message="Pick at least three Smarts-linked skills at d6" summary="Spend 5 Skill points on Healing, Investigation, and Knowledge skills.">
+			<![CDATA[
+		  var smartSkillCount as number
+		  smartSkillCount = 0
+
+		  foreach pick in hero where "thingid.skGambling|thingid.skHealing|thingid.skInvest|thingid.skKnow?|thingid.skNotice|thingid.skRepair|thingid.skStreet|thingid.skSurvival|thingid.skTaunt|thingid.skTracking"
+			if (eachpick.field[trtFinal].value >= 3) then
+			  smartSkillCount += 1
+			  endif
+			nexteach
+			
+		  validif (smartSkillCount >= 3)
+		]]></evalrule>
+
+	</thing>
+	
+	  <thing id="und11Thief" name="Underworld: Thief" description="Your character is inherently gifted at larceny, possessing the Thief Edge without concern for requirements. He also gains +3 Skill Points to spend on Climbing, Lockpicking, and Stealth as he chooses." compset="HeroJrny">
+    <usesource source="SavRiftC"/>
+    <tag group="RiftsHJ" tag="Under"/>
+    <bootstrap thing="edgThief">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <eval phase="PreTraits" priority="5000">~+3 Skill Points
+#resmax[resSkill] += 3</eval>
+    <evalrule phase="Validate" priority="5000" message="Spend 3 Skill Points to spend on Climbing, Lockpicking, and Stealth " summary="Spend 3 Skill Points to spend on Climbing, Lockpicking, and Stealth skills."><![CDATA[
+      var totalcount as number
+      totalcount = 0
+
+      foreach pick in hero where "thingid.skClimbing|thingid.skLockpick|thingid.skStealth"
+        if (eachpick.field[trtFinal].value >= 2) then
+          totalcount += (eachpick.field[trtFinal].value-1)
+          endif
+        nexteach
+		
+      validif (totalcount >= 3)]]></evalrule>
+    </thing>
+</document>

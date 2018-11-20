@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+	<!-- TCA: Tags specific to Rifts --> 
+	<thing id="cybSRExArm" name="Extra Set Of Arms" description="A second set of arms and hands can be installed on a reinforced frame, providing enormous benefits at the cost of dehumanizing the cyborg even more. This upgrade gives the character one additional non-movement action, with no multi-action penalty." compset="Cyberware">
+		<fieldval field="grDupMax" value="1"/>
+		<fieldval field="cybStrain" value="3"/>
+		<fieldval field="grCost" value="250000"/>
+		<fieldval field="shortname" value="Extra Arms"/>
+		<usesource source="SavRiftC"/>
+		<tag group="Equipment" tag="StdCyber"/>
+		<eval phase="PreTraits" priority="5000">
+			<![CDATA[herofield[acHands].value += 2]]>
+		</eval>
+	</thing>
+	<thing id="cybSRArmP" name="Armor Plating" description="The same materials used to create worn armor can be directly attached to a cyborg’s frame for added protection. Each application adds +4 M.D.C. Armor." compset="Cyberware"  stacking="merge">
+		<fieldval field="grCost" value="40000"/>
+		<fieldval field="grDupMax" value="3"/>
+		<fieldval field="cybStrain" value="1"/>
+		<usesource source="SavRiftC"/>
+		<tag group="Equipment" tag="StdCyber"/>
+		<eval phase="Effects">herofield[acDefHead].value += 4
+herofield[acDefArms].value += 4
+herofield[acDefLegs].value += 4
+herofield[acDefTorso].value += 4
+		</eval>
+		<exprreq message="Over maximum number of duplicates">
+			<![CDATA[hero.tagcount[Cyberware.cybSRArmP]<= 3]]>
+		</exprreq>
+	</thing>
+	<thing id="cybSRTaEye" name="Targeting Eye" description="Requiring the Optics Package, this enhancement grants a +2 to all Shooting rolls for weapons the character spends at least a full round calibrating." compset="Cyberware">
+		<fieldval field="grCost" value="12000"/>
+		<fieldval field="cybStrain" value="1"/>
+		<fieldval field="grDupMax" value="1"/>
+		<usesource source="SavRiftC"/>
+		<tag group="Equipment" tag="StdCyber"/>
+		<eval phase="PreTraits" priority="5000">
+			<![CDATA[perform #traitroll[skShooting,+,2,"Targeting Eye"]]]>
+		</eval>
+		<exprreq message="Optics Package required.">
+			<![CDATA[hero.tagcount[Cyberware.cybSROptiP] >= 1]]></exprreq>
+	</thing>
+	<thing id="cybSREDSA" name="Expanded Detection and Security Array" description="This combination of radar, sonar, and motion detectors grants the cyborg 360° awareness of his surroundings. This grants a +2 to Notice checks and the Danger Sense Edge." compset="Cyberware">
+		<fieldval field="grDupMax" value="1"/>
+		<fieldval field="grCost" value="33000"/>
+		<fieldval field="cybStrain" value="2"/>
+		<usesource source="SavRiftC"/>
+		<bootstrap thing="edgDangSen">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<eval phase="PreTraits" priority="5000">
+			<![CDATA[perform #traitroll[skNotice,+,2,"Expanded Detection and Security Array"]]]>
+		</eval>
+	</thing>
+</document>

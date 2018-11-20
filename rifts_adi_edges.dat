@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+	<!-- TCA: Tags specific to Rifts --> 
+	<thing id="edgSRUpgade" name="Upgrade" description="For those who embrace cybernetics as a part of their being (by choice or necessity), the desire to upgrade is often an all encompassing goal on its own. Taking this Edge—which may only be selected once per Rank—means the cybernetic hero manages to achieve the necessary resources and opportunity to have a new piece of cybernetic technology installed, or have one upgraded to a higher degree. Though the GM has final say on what is and is not appropriate, anything in the Cybernetics section is fair game otherwise." compset="Edge" summary="Add a new piece of cyberware of your choice">
+		<fieldval field="usrCandid1" value="component.Cyberware"/>
+		<usesource source="SavRiftC"/>
+		<tag group="ChooseSrc1" tag="Thing" name="All Things" abbrev="All Things"/>
+		<tag group="MinRank" tag="1" name="Seasoned" abbrev="Seasoned"/>
+		<tag group="EdgeType" tag="Iconic"/>
+		<eval phase="PreTraits" priority="5000"><![CDATA[
+			doneif (field[usrChosen1].ischosen = 0)
+			~NEED TO PROGRAMATICALLY ADD CYBER, But this is still usefull as an edge holder
+		  ]]>
+		  </eval>
+		<evalrule phase="Validate" priority="5000" message="May only be taken once per rank" summary="May only be taken once per rank">
+			<![CDATA[validif (herofield[acRank].value + 1 >= hero.tagcount[Edge.edgSRUpgade])]]></evalrule>
+		<exprreq message="Combat Cyborg or M.A.R.S. CTW required.">
+			<![CDATA[(hero.tagcount[Group.grpSRCoCyb] + hero.tagcount[Group.grpSRMarsC]) >= 1]]></exprreq>
+		<exprreq message="Seasoned required.">
+			<![CDATA[herofield[acRank].value >= 1]]></exprreq>
+	</thing>
+	
+	
+</document>
