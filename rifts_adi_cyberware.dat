@@ -12,7 +12,7 @@
 			<![CDATA[herofield[acHands].value += 2]]>
 		</eval>
 	</thing>
-	<thing id="cybSRArmP" name="Armor Plating" description="The same materials used to create worn armor can be directly attached to a cyborg’s frame for added protection. Each application adds +4 M.D.C. Armor." compset="Cyberware"  stacking="merge">
+	<thing id="cybSRArmP" name="Armor Plating" description="The same materials used to create worn armor can be directly attached to a cyborg’s frame for added protection. Each application adds +4 M.D.C. Armor." compset="Cyberware">
 		<fieldval field="grCost" value="40000"/>
 		<fieldval field="grDupMax" value="3"/>
 		<fieldval field="cybStrain" value="1"/>

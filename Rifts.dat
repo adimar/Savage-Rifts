@@ -168,7 +168,7 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <eval phase="PreTraits" priority="5000">~Agility +1 die Type
 #traitcreation[attrAgi] += 1</eval>
     </thing>
-  <thing id="fg5SLObs" name="(Obsolete) Smart and Learned" description="Your hero adds one die type to Smarts and begins with a d6 in any three Smarts-linked skills." compset="Fortune" summary="Smarts +1 Die Type; d6 in three Smarts skills." uniqueness="unique">
+  <thing id="fg5SLObs" name="*Obsolete Smart and Learned" description="Your hero adds one die type to Smarts and begins with a d6 in any three Smarts-linked skills." compset="Fortune" summary="Smarts +1 Die Type; d6 in three Smarts skills." uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="explicit" tag="5"/>
     <eval phase="PreTraits" priority="5000">~Smarts +1 die Type
@@ -1175,7 +1175,7 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
 #traitcreation[skStreet] += 2
 hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     </thing>
-  <thing id="Obsund11Thief" name="Obsolete Underworld: Thief" description="Your character is inherently gifted at larceny, possessing the Thief Edge without concern for requirements. He also gains +3 Skill Points to spend on Climbing, Lockpicking, and Stealth as he chooses." compset="HeroJrny">
+  <thing id="Obsund11Thief" name="*Obsolete Underworld: Thief" description="Your character is inherently gifted at larceny, possessing the Thief Edge without concern for requirements. He also gains +3 Skill Points to spend on Climbing, Lockpicking, and Stealth as he chooses." compset="HeroJrny">
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="Under"/>
     <bootstrap thing="edgThief">
@@ -1344,6 +1344,7 @@ endif]]>
     <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
     <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
     <eval phase="Setup" priority="5000">trustme
+		#resmax[resHeroJrn] += 2
       herofield[acCashCfg].value += 5000</eval>
     </thing>
   <thing id="edgSRRich2" name="Filthy Rich" description="This character made some major scores before the current adventure. She’s got 20,000 credits saved up and gets three additional rolls (total of five) on the above listed tables." compset="Edge" summary="20K starting cash; 5 gear rolls." uniqueness="unique">
@@ -1351,6 +1352,7 @@ endif]]>
     <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
     <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
     <eval phase="Setup" priority="5000">trustme
+	#resmax[resHeroJrn] += 5
       herofield[acCashCfg].value += 15000</eval>
     <pickreq thing="edgSRRich1"/>
     </thing>
@@ -1925,7 +1927,7 @@ hero.child[ehExprHlp1].field[ehRaceHdr].text = header]]></eval>
     </thing>
   <thing id="rpSRPerso" name="Personable" description="The D’Norr are highly charming and easy to get along with. They have +2 Charisma." compset="RacialProp" summary="+2 Charisma." uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[trCharisma] += 2
+    <eval phase="PreTraits" priority="5000">#traitcreation[trCharisma] += 2
       <before name="Calc trtFinal"/>
       </eval>
     </thing>
@@ -1937,7 +1939,7 @@ hero.child[ehExprHlp1].field[ehRaceHdr].text = header]]></eval>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="BreedAdv" tag="Agile"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[attrAgi] += 1
+    <eval phase="PreTraits" priority="3000">#traitcreation[attrAgi] += 1
 hero.child[attrAgi].field[trtMaximum].value += 1
 
 perform hero.assign[BreedAdv.Agile]</eval>
@@ -1948,7 +1950,7 @@ perform hero.assign[BreedAdv.Agile]</eval>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="BreedAdv" tag="Strong"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[attrStr] += 1
+    <eval phase="PreTraits" priority="3000">#traitcreation[attrStr] += 1
 hero.child[attrStr].field[trtMaximum].value += 1
 
 perform hero.assign[BreedAdv.Strong]</eval>
@@ -1959,7 +1961,7 @@ perform hero.assign[BreedAdv.Strong]</eval>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="BreedAdv" tag="Rugged"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[attrVig] += 1
+    <eval phase="PreTraits" priority="3000">#traitcreation[attrVig] += 1
 hero.child[attrVig].field[trtMaximum].value += 1
 
 perform hero.assign[BreedAdv.Rugged]</eval>
@@ -1967,7 +1969,7 @@ perform hero.assign[BreedAdv.Rugged]</eval>
     </thing>
   <thing id="rpSRBreAdv" name="Breed Advantage" description="A Dog Boy begins with the Breed Advantage Edge (see sidebar). The player decides what breed (or breeds) the character is influenced by. After creation, the Dog Boy may take the Edge again at Novice Rank." compset="RacialProp" summary="Breed Advantage Edge" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="PreTraits" priority="5000">~set resRaceEdge to selection
+    <eval phase="PreTraits" priority="3000">~set resRaceEdge to selection
 #resmax[resRaceSel] += 1
       <before name="Calc trtFinal"/>
       </eval>
@@ -1976,8 +1978,8 @@ perform hero.assign[BreedAdv.Rugged]</eval>
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Background"/>
-    <tag group="BreedAdv" tag="Strong"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[trPace] += 2
+    <tag group="BreedAdv" tag="Fast"/>
+    <eval phase="PreTraits" priority="3000">#traitcreation[trPace] += 2
 
 perform hero.assign[BreedAdv.Fast]</eval>
     <exprreq message="Dog Boy race required."><![CDATA[hero.tagis[Race.racSRDogB] <> 0]]></exprreq>
@@ -1987,7 +1989,7 @@ perform hero.assign[BreedAdv.Fast]</eval>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="BreedAdv" tag="Tough"/>
-    <eval phase="PreTraits" priority="5000"><![CDATA[perform #traitadjust[trTough,+,2,"Breed Advantage (Tough)"]
+    <eval phase="PreTraits" priority="3000"><![CDATA[perform #traitadjust[trTough,+,2,"Breed Advantage (Tough)"]
 
 perform hero.assign[BreedAdv.Tough]]]></eval>
     <exprreq message="Dog Boy race required."><![CDATA[hero.tagis[Race.racSRDogB] <> 0]]></exprreq>
@@ -1997,7 +1999,7 @@ perform hero.assign[BreedAdv.Tough]]]></eval>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="BreedAdv" tag="Tracker"/>
-    <eval phase="PreTraits" priority="5000"><![CDATA[perform #traitroll[skTracking,+,2,"Breed Advantage (Tracking)"]
+    <eval phase="PreTraits" priority="3000"><![CDATA[perform #traitroll[skTracking,+,2,"Breed Advantage (Tracking)"]
 
 perform hero.assign[BreedAdv.Tracker]]]></eval>
     <exprreq message="Dog Boy race required."><![CDATA[hero.tagis[Race.racSRDogB] <> 0]]></exprreq>
@@ -2015,7 +2017,7 @@ perform hero.assign[BreedAdv.Water]]]></eval>
   <thing id="rpSRKeenSm" name="Keen Sense of Smell" description="Dog Boys have a sense of smell similar to their canine counterparts. They gain a +2 bonus on Notice checks based on smell, as well as +2 on all Tracking rolls." compset="RacialProp">
     <usesource source="SavRiftC"/>
     <tag group="User" tag="Activation"/>
-    <eval phase="PreTraits" priority="5000"><![CDATA[perform #traitroll[skTracking,+,2,"Keen Sense of Smell"]
+    <eval phase="PreTraits" priority="3000"><![CDATA[perform #traitroll[skTracking,+,2,"Keen Sense of Smell"]
 
 if (field[abilActive].value <> 0) then
   perform #traitroll[skNotice,+,2,"Keen Sense of Smell"]
@@ -2549,7 +2551,7 @@ perform hero.assign[Rifts.MARS]
 #traitcreation[skKnowMed] += 1
 hero.childfound[resSkill].field[resSpent].value -= 3</eval>
     </thing>
-  <thing id="grpSRMarsBObs" name="Obsolete M.A.R.S. (City Rat)" description="Masters of the urban sprawls that represent civilization in the new world, City Rats also take pride in whatever cybernetics they manage to get installed.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsBObs" name="*Obsolete M.A.R.S. (City Rat)" description="Masters of the urban sprawls that represent civilization in the new world, City Rats also take pride in whatever cybernetics they manage to get installed.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="skStreet"></bootstrap>
@@ -2572,7 +2574,7 @@ perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
     <evalrule phase="Final" priority="1000" message="Must have 4 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 4)]]></evalrule>
     </thing>
-  <thing id="grpSRMarsCObs" name="Obsolete M.A.R.S. (Cybernetic Techno-Warrior)" description="Also called a Headhunter and usually operating as a mercenary, heavily focused on improving his value via cybernetics.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsCObs" name="*Obsolete M.A.R.S. (Cybernetic Techno-Warrior)" description="Also called a Headhunter and usually operating as a mercenary, heavily focused on improving his value via cybernetics.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="Headhunter"/>
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
@@ -4741,7 +4743,7 @@ validif (rolls = 0)]]></evalrule>
     <tag group="ArmorLoc" tag="Arms"/>
     <tag group="ArmorLoc" tag="Legs"/>
     </thing>
-  <thing id="cybSRExArmObs" name="Obsolete Extra Set Of Arms" description="A second set of arms and hands can be installed on a reinforced frame, providing enormous benefits at the cost of dehumanizing the cyborg even more. This upgrade gives the character one additional non-movement action, with no multi-action penalty." compset="Cyberware">
+  <thing id="cybSRExArmObs" name="*Obsolete Extra Set Of Arms" description="A second set of arms and hands can be installed on a reinforced frame, providing enormous benefits at the cost of dehumanizing the cyborg even more. This upgrade gives the character one additional non-movement action, with no multi-action penalty." compset="Cyberware">
     <fieldval field="grDupMax" value="1"/>
     <fieldval field="cybStrain" value="3"/>
     <fieldval field="grCost" value="250000"/>
@@ -4757,7 +4759,7 @@ validif (rolls = 0)]]></evalrule>
     <tag group="Equipment" tag="StdCyber"/>
     <tag group="RiftCyCat" tag="BioRep"/>
     </thing>
-  <thing id="cybSRArmPObs" name="Obsolete Armor Plating" description="The same materials used to create worn armor can be directly attached to a cyborg’s frame for added protection. Each application adds +4 M.D.C. Armor." compset="Cyberware"  stacking="merge">
+  <thing id="cybSRArmPObs" name="*Obsolete Armor Plating" description="The same materials used to create worn armor can be directly attached to a cyborg’s frame for added protection. Each application adds +4 M.D.C. Armor." compset="Cyberware"  stacking="merge">
     <fieldval field="grCost" value="40000"/>
     <fieldval field="grDupMax" value="3"/>
     <fieldval field="cybStrain" value="1"/>
@@ -4774,7 +4776,7 @@ herofield[acDefTorso].value += 4</eval>
     <fieldval field="grDupMax" value="8"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[attrStr] += field[stackQty].value
+    <eval phase="PreTraits" priority="3000">#traitbonus[attrStr] += field[stackQty].value
 hero.child[attrStr].field[trtMaximum].value += field[stackQty].value</eval>
     </thing>
   <thing id="cybSRCWR" name="Cyber-Wired Reflexes" description="The cyborg’s Agility is increased one step for each application of these artificial nervous system enhancements and hard-wired celerity systems. Each step past d12 adds a +1. This particular enhancement is a requirement for many other upgrades." compset="Cyberware" stacking="merge">
@@ -4782,8 +4784,9 @@ hero.child[attrStr].field[trtMaximum].value += field[stackQty].value</eval>
     <fieldval field="grCost" value="12000"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[attrAgi] += field[stackQty].value
-	hero.child[attrAgi].field[trtMaximum].value += field[stackQty].value</eval>
+    <eval phase="PreTraits" priority="3000">
+		#traitbonus[attrAgi] += field[stackQty].value
+		hero.child[attrAgi].field[trtMaximum].value += field[stackQty].value</eval>
     </thing>
   <thing id="cybSRLifeS" name="Internal Life Support" description="The character has an internal air supply and other systems that make him immune to suffocation, toxins, and diseases. He also gains +4 to resist the effects of radiation, intense environmental temperatures (but not direct damage), and other dangerous environmental effects. He only requires a fifth of the nutrition of a fully organic person." compset="Cyberware">
     <fieldval field="grCost" value="150000"/>
@@ -4867,7 +4870,7 @@ hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     <tag group="Equipment" tag="StdCyber"/>
     <exprreq message="Optics Package required."><![CDATA[hero.tagcount[Cyberware.cybSROptiP] >= 1]]></exprreq>
     </thing>
-  <thing id="cybSRTaEyeObs" name="Obsolete Targeting Eye" description="Requiring the Optics Package, this enhancement grants a +2 to all Shooting rolls for weapons the character spends at least a full round calibrating." compset="Cyberware">
+  <thing id="cybSRTaEyeObs" name="*Obsolete Targeting Eye" description="Requiring the Optics Package, this enhancement grants a +2 to all Shooting rolls for weapons the character spends at least a full round calibrating." compset="Cyberware">
     <fieldval field="grCost" value="12000"/>
     <fieldval field="cybStrain" value="1"/>
     <fieldval field="grDupMax" value="1"/>
@@ -4895,7 +4898,7 @@ hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     <fieldval field="grCost" value="50000"/>
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="cybSREDSAObs" name="Obsolete Expanded Detection and Security Array" description="This combination of radar, sonar, and motion detectors grants the cyborg 360° awareness of his surroundings. This grants a +2 to Notice checks and the Danger Sense Edge." compset="Cyberware">
+  <thing id="cybSREDSAObs" name="*Obsolete Expanded Detection and Security Array" description="This combination of radar, sonar, and motion detectors grants the cyborg 360° awareness of his surroundings. This grants a +2 to Notice checks and the Danger Sense Edge." compset="Cyberware">
     <fieldval field="grDupMax" value="1"/>
     <fieldval field="grCost" value="33000"/>
     <fieldval field="cybStrain" value="2"/>
@@ -5414,7 +5417,7 @@ hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     <bootstrap thing="cybSRBiStA">
       <assignval field="stackQty" value="6"/>
       </bootstrap>
-    <eval phase="PreTraits" priority="5000">#traitbonus[trSFStrnMx] += 1
+    <eval phase="PreTraits" priority="3000">#traitbonus[trSFStrnMx] += 1
 hero.childfound[attrStr].field[trtMaximum].value += 2</eval>
     </thing>
   <thing id="rpSRHPLegs" name="High-Performance Legs" description="Full-conversion ‘borgs possess powerful legs and actuators; they begin with the Fleet-Footed Edge. This can be enhanced with additional cybernetics." compset="FraAbility" summary="Gain the Fleet Footed Edge">
@@ -5435,7 +5438,7 @@ hero.childfound[attrStr].field[trtMaximum].value += 2</eval>
     <tag group="ArmorLoc" tag="Torso"/>
     <tag group="Equipment" tag="StackArmor"/>
     <tag group="ArmorLoc" tag="Arms"/>
-    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+    <eval phase="PreTraits" priority="3000"><![CDATA[if (field[grIsEquip].value <> 0) then
         perform #traitadjust[trTough,+,3,"Toughness"]
         endif]]></eval>
     </thing>

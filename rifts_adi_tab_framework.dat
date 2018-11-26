@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file contains the definition of the "Abilities" tab panel. This tab is where
+      the user selects the special abilities for the character.
+
+      All public visual elements used with this tab panel start with the prefix "ab"
+      to associate them with the tab.
+-->
+<document signature="Hero Lab Data">
+  <portal id="fraChsTblCyber" style="tblNormal">
+    <table_dynamic component="none" showtemplate="fraChsPic3" choosetemplate="sfCyThing" candidatepick="ehExprHlp3" candidatefield="ehFrameExp" headertemplate="fraChsPic3" addpick="resFraStrain">
+      <list>Rifts.FrameStrain</list>
+    
+      <autotag group="Rifts" tag="FrameStrain"/>
+      <description/>
+      <additem><![CDATA[      
+			@text &= hero.child[ehExprHlp3].field[ehFrameAdd].text
+			]]></additem>
+    </table_dynamic>
+  </portal>
+  <template id="fraChsPic3" name="Chooser Pick" compset="Cyberware" marginhorz="3" marginvert="2">
+    <portal id="hdrText" style="lblTitle" isheader="yes">
+      <label>
+        <labeltext><![CDATA[
+  	       @text = hero.child[ehExprHlp3].field[ehFrameHdr].text
+      	   ]]></labeltext>
+      </label>
+    </portal>
+    <portal id="name" style="lblNormal" showinvalid="yes">
+      <label>
+        <labeltext><![CDATA[
+  	        if (field[stackQty].value > 1) then 
+				@text = field[name].text & " (x" & field[stackQty].value & ")"
+			else
+				@text = field[name].text
+            endif
+      	   ]]></labeltext>
+      </label>
+    </portal>
+    <portal id="dupCybIncr" style="incrSimple" >
+       <incrementer field="stackQty">
+	   
+	   </incrementer>
+	   
+    </portal>
+    <portal id="strain" style="lblNormal">
+      <label>
+        <labeltext><![CDATA[
+		  if (field[stackQty].value > 1) then 
+				var totalStrain as number
+				totalStrain = field[stackQty].value*field[cybStrain].value
+				@text = totalStrain & " (" & field[stackQty].value &"*"& field[cybStrain].value &")"
+			else
+				@text = field[cybStrain].value
+            endif
+         
+          ]]></labeltext>
+      </label>
+    </portal>
+    <portal id="info" style="actInfo">
+      <action action="info"/>
+      <mouseinfo/>
+    </portal>
+    <portal id="delete" style="actDelete" tiptext="Click to delete this item">
+      <action action="delete"/>
+    </portal>
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if we've been assigned a non-default width for use when showing things, adopt
+      ~that width now
+      if (ispick = 0) then
+        var size as number
+        size = tagvalue[SimpleItem.width?]
+        if (size > 0) then
+          width = size
+          endif
+        endif
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~position our tallest portal at the top
+      portal[info].top = 0
+
+      ~center the other portals vertically
+	  
+
+	  perform portal[strain].centervert
+      perform portal[name].centervert
+      perform portal[delete].centervert
+
+   
+
+      ~if we're showing a thing, the info and delete buttons are irrelevant, since
+      ~we should be showing within a chooser, in which case there's nothing to
+      ~delete and we have the description already visible
+      var edge as number
+      if (ispick = 0) then
+	  
+
+	  
+        portal[info].visible = 0
+        portal[delete].visible = 0
+		portal[strain].visible = 0
+        edge = width
+      else
+	  	~position the delete portal on the far right
+		perform portal[delete].alignedge[right,0]
+
+		~position the info portal to the left of the delete button
+		perform portal[info].alignrel[rtol,delete,-8]
+        edge = portal[info].left - 5
+		
+		~position the strain on the right of info
+		perform portal[strain].alignrel[rtol,info,-8]
+      endif
+
+	  
+	  
+      ~position the name on the left and let it use all available space
+      portal[name].left = 0
+      portal[name].width = minimum(portal[name].width,edge)
+
+	
+      ~center the name if requested or this is a show-only thing
+      if (tagis[SimpleItem.CenterName] + tagis[thing.showonly] <> 0) then
+        perform portal[name].centerhorz
+        endif
+
+      ~if this is an auto-added pick, change its font to indicate that fact
+      if (ispick + !candelete >= 2) then
+        perform portal[name].setstyle[lblAuto]
+        endif
+      ]]></position>
+    <header><![CDATA[
+		~our header height is the height of our labels
+		height = portal[name].height
+
+		~each of our header labels has the same width as the corresponding data beneath
+		portal[hdrText].width = width
+
+		~align all header labels at the bottom of the header region
+		perform portal[hdrText].alignedge[bottom,0]
+
+		]]></header>
+  </template>
+</document>
