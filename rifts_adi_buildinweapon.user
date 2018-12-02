@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+  <thing id="cybSRBIRW" name="Built-In Ranged Weapon" description="Each of the weapons listed in the Close Combat section can be integrated into a cyborg’s framework. Treat the Strain as 1 for every ten pounds (round up), and multiply the cost by 1.5 to get the cybernetic version cost." compset="Cyberware">
+    <fieldval field="cybStrain" value="1"/>
+    <fieldval field="cybCandid1" value="component.WeaponBase &amp; !Equipment.Natural"/>
+    <fieldval field="grCost" value="1.5"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Equipment" tag="StdCyber"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+	
+    </thing>
+</document>

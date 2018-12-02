@@ -168,12 +168,6 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <eval phase="PreTraits" priority="5000">~Agility +1 die Type
 #traitcreation[attrAgi] += 1</eval>
     </thing>
-  <thing id="fg5SLObs" name="*Obsolete Smart and Learned" description="Your hero adds one die type to Smarts and begins with a d6 in any three Smarts-linked skills." compset="Fortune" summary="Smarts +1 Die Type; d6 in three Smarts skills." uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <tag group="explicit" tag="5"/>
-    <eval phase="PreTraits" priority="5000">~Smarts +1 die Type
-#traitcreation[attrSma] += 1</eval>
-    </thing>
   <thing id="fg6SD" name="Spiritual and Determined" description="Your hero adds one type to Spirit and begins with the Strong Willed Edge." compset="Fortune" summary="Spirit +1 Die Type; Strong Willed Edge" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="explicit" tag="6"/>
@@ -507,6 +501,7 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <bootstrap thing="skKnowPoli"></bootstrap>
     <eval phase="PreTraits" priority="5000">~Knowledge (Politics) d8
 #traitcreation[skKnowPoli] += 2
+perform #traitroll[skPersuade,+,2,"HJ:Education:Politics"]
 hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     </thing>
   <thing id="ed12Comm" name="Education: Command" description="The world was ended in war, reborn in war, and war remains the most prevalent truth of the age. Your character understands this better than anyone, and he gains a d8 in Knowledge (Battle) to prove it. He also has the Command Edge (or one Leadership Edge of her choice if she already has Command)." compset="HeroJrny">
@@ -1081,19 +1076,7 @@ hero.child[ehExprHlp1].field[ehHJAdd].text = additem
 hero.child[ehExprHlp1].field[ehHJExp].text = chooser
 hero.child[ehExprHlp1].field[ehHJHdr].text = header]]></eval>
     </thing>
-  <thing id="tra17Ace" name="Training: Ace" description="Though lots of folks can jump behind a wheel or grab a stick, your hero understands the nuances of guiding a machine effectively through the worst conditions. She gains the Ace Edge (or Combat Ace, if she already has Ace), as well as a free die type increase in her choice of Boating, Driving, or Piloting." compset="HeroJrny">
-    <fieldval field="usrCandid1" value="thingid.skBoating|thingid.skDriving|thingid.skPiloting"/>
-    <usesource source="SavRiftC"/>
-    <tag group="RiftsHJ" tag="Train"/>
-    <tag group="ChooseSrc1" tag="Hero"/>
-    <bootstrap thing="edgAce">
-      <autotag group="thing" tag="skipprereq"/>
-      </bootstrap>
-    <eval phase="Setup" priority="5000"><![CDATA[
-	if (field[usrChosen1].ischosen <> 0) then
-      field[usrChosen1].chosen.field[trtBonus].value += 1
-	  endif]]></eval>
-    </thing>
+
   <thing id="tra18Wild" name="Training: Wild Card" description="There are moments when everything comes together and an opportunity presents itself. You’re hero knows how to make the most of just such a moment; choose one Wild Card Edge, regardless of requirements." compset="HeroJrny">
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="Train"/>
@@ -1174,26 +1157,6 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <eval phase="PreTraits" priority="5000">~Streetwise d8
 #traitcreation[skStreet] += 2
 hero.childfound[resSkill].field[resSpent].value -= 1</eval>
-    </thing>
-  <thing id="Obsund11Thief" name="*Obsolete Underworld: Thief" description="Your character is inherently gifted at larceny, possessing the Thief Edge without concern for requirements. He also gains +3 Skill Points to spend on Climbing, Lockpicking, and Stealth as he chooses." compset="HeroJrny">
-    <usesource source="SavRiftC"/>
-    <tag group="RiftsHJ" tag="Under"/>
-    <bootstrap thing="edgThief">
-      <autotag group="thing" tag="skipprereq"/>
-      </bootstrap>
-    <eval phase="PreTraits" priority="5000">~+3 Skill Points
-#resmax[resSkill] += 3</eval>
-    <evalrule phase="Validate" priority="5000" message="Spend 3 Skill Points to spend on Climbing, Lockpicking, and Stealth " summary="Spend 3 Skill Points to spend on Climbing, Lockpicking, and Stealth skills."><![CDATA[
-      var totalcount as number
-      totalcount = 0
-
-      foreach pick in hero where "thingid.skClimbing|thingid.skLockpick|thingid.skStealth"
-        if (eachpick.field[trtFinal].value >= 2) then
-          totalcount += (field[trtUser].value - 1)
-          endif
-        nexteach
-		
-      validif (totalcount >= 3)]]></evalrule>
     </thing>
   <thing id="und14Infil" name="Underworld: Infiltration" description="Your hero is an infiltration specialist, skilled at blending into a culture or group for undercover work. She gains a +1 to any Investigation, Persuasion, Stealth, and Streetwise rolls related to being undercover, and a +2 to any Common Knowledge rolls for disguising herself and playing the role. She also gains two additional languages on top of what she already knows." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -2550,61 +2513,6 @@ perform hero.assign[Rifts.MARS]
 #traitcreation[skKnowCybr] += 1
 #traitcreation[skKnowMed] += 1
 hero.childfound[resSkill].field[resSpent].value -= 3</eval>
-    </thing>
-  <thing id="grpSRMarsBObs" name="*Obsolete M.A.R.S. (City Rat)" description="Masters of the urban sprawls that represent civilization in the new world, City Rats also take pride in whatever cybernetics they manage to get installed.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <tag group="Rifts" tag="MARS"/>
-    <bootstrap thing="skStreet"></bootstrap>
-    <bootstrap thing="edgSRScrou">
-      <autotag group="thing" tag="skipprereq"/>
-      </bootstrap>
-    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
-    <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
-    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
-    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
-    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
-    <eval phase="PreTraits" priority="5000">~Streetwise d6
-#traitcreation[skStreet] += 1
-hero.childfound[resSkill].field[resSpent].value -= 1</eval>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortuneAndGlory]
-perform hero.assign[Rifts.MARS]
-#resmax[resFortune] += 3</eval>
-    <evalrule phase="Final" priority="1000" message="Must have 4 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 4)]]></evalrule>
-    </thing>
-  <thing id="grpSRMarsCObs" name="*Obsolete M.A.R.S. (Cybernetic Techno-Warrior)" description="Also called a Headhunter and usually operating as a mercenary, heavily focused on improving his value via cybernetics.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="Headhunter"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Rifts" tag="MARS"/>
-    <bootstrap thing="edgSRUpgra">
-      <autotag group="thing" tag="skipprereq"/>
-      </bootstrap>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortuneAndGlory]
-perform hero.assign[Rifts.MARS]
-#resmax[resFortune] += 3</eval>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4
-
-~set resFraSel1
-#resmax[resFraSel1] += 1</eval>
-    <eval phase="Render" priority="10000"><![CDATA[var header as string
-var chooser as string
-var additem as string
-
-additem = "Add Gear"
-header = "Gear: "
-header &= hero.child[resFraSel1].field[resSummary].text
-
-chooser = "component.Edge & Rifts.StartGear & Rifts.HHEquip"
-
-~set up chooser expressions
-hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
-hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
-hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
-    <evalrule phase="Final" priority="1000" message="Must have 6 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 6)]]></evalrule>
     </thing>
   <thing id="grpSRMarsD" name="M.A.R.S. (Merc Soldier)" description="Though they like to be paid, it’s not always about the money. This package also applies to anyone with a strong military or security background.\n\nNOTES:  When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -4743,14 +4651,6 @@ validif (rolls = 0)]]></evalrule>
     <tag group="ArmorLoc" tag="Arms"/>
     <tag group="ArmorLoc" tag="Legs"/>
     </thing>
-  <thing id="cybSRExArmObs" name="*Obsolete Extra Set Of Arms" description="A second set of arms and hands can be installed on a reinforced frame, providing enormous benefits at the cost of dehumanizing the cyborg even more. This upgrade gives the character one additional non-movement action, with no multi-action penalty." compset="Cyberware">
-    <fieldval field="grDupMax" value="1"/>
-    <fieldval field="cybStrain" value="3"/>
-    <fieldval field="grCost" value="250000"/>
-    <fieldval field="shortname" value="Extra Arms"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Equipment" tag="StdCyber"/>
-    </thing>
   <thing id="cybSRAdren" name="Adrenal System" description="This bio-enhancement of the internal adrenal network grants a +2 to recover from Shaken (which stacks with Combat Reflexes). Doesn’t work for Full Conversion Cyborgs." compset="Cyberware">
     <fieldval field="grDupMax" value="1"/>
     <fieldval field="cybStrain" value="2"/>
@@ -4758,17 +4658,6 @@ validif (rolls = 0)]]></evalrule>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
     <tag group="RiftCyCat" tag="BioRep"/>
-    </thing>
-  <thing id="cybSRArmPObs" name="*Obsolete Armor Plating" description="The same materials used to create worn armor can be directly attached to a cyborg’s frame for added protection. Each application adds +4 M.D.C. Armor." compset="Cyberware"  stacking="merge">
-    <fieldval field="grCost" value="40000"/>
-    <fieldval field="grDupMax" value="3"/>
-    <fieldval field="cybStrain" value="1"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Equipment" tag="StdCyber"/>
-    <eval phase="Effects">herofield[acDefHead].value += 4
-herofield[acDefArms].value += 4
-herofield[acDefLegs].value += 4
-herofield[acDefTorso].value += 4</eval>
     </thing>
   <thing id="cybSRBiStA" name="Bionic Strength Augmentation" description="Fully bionic arms and legs, reinforced artificial musculature, and other techniques raise the cyborg’s Strength. Each step past d12 adds a +1." compset="Cyberware" summary="Strength +1 Step" stacking="merge">
     <fieldval field="cybStrain" value="1"/>
@@ -4870,14 +4759,6 @@ hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     <tag group="Equipment" tag="StdCyber"/>
     <exprreq message="Optics Package required."><![CDATA[hero.tagcount[Cyberware.cybSROptiP] >= 1]]></exprreq>
     </thing>
-  <thing id="cybSRTaEyeObs" name="*Obsolete Targeting Eye" description="Requiring the Optics Package, this enhancement grants a +2 to all Shooting rolls for weapons the character spends at least a full round calibrating." compset="Cyberware">
-    <fieldval field="grCost" value="12000"/>
-    <fieldval field="cybStrain" value="1"/>
-    <fieldval field="grDupMax" value="1"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Equipment" tag="StdCyber"/>
-    <exprreq message="Optics Package required."><![CDATA[hero.tagcount[Cyberware.cybSROptiP] >= 1]]></exprreq>
-    </thing>
   <thing id="cybSRAudiP" name="Audio Package" description="Ear canal replacements, embedded speakers and microphones, and a number of other enhancements give the cyborg an array of listening and projection options—+2 to hearing-based Notice checks; hyper-sonic and sub-sonic ranges to his hearing; a loudspeaker capable of projecting audio over a 100-yard radius; automatic sound dampeners that give a +2 to resist any audio-based attacks or deafening effects. Finally, the audio package allows sounds and conversations to be recorded and played back later." compset="Cyberware">
     <fieldval field="grDupMax" value="1"/>
     <fieldval field="cybStrain" value="1"/>
@@ -4896,12 +4777,6 @@ hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     <fieldval field="grDupMax" value="1"/>
     <fieldval field="cybStrain" value="1"/>
     <fieldval field="grCost" value="50000"/>
-    <usesource source="SavRiftC"/>
-    </thing>
-  <thing id="cybSREDSAObs" name="*Obsolete Expanded Detection and Security Array" description="This combination of radar, sonar, and motion detectors grants the cyborg 360° awareness of his surroundings. This grants a +2 to Notice checks and the Danger Sense Edge." compset="Cyberware">
-    <fieldval field="grDupMax" value="1"/>
-    <fieldval field="grCost" value="33000"/>
-    <fieldval field="cybStrain" value="2"/>
     <usesource source="SavRiftC"/>
     </thing>
   <thing id="cybSRLangT" name="Language Translator" description="Providing translation of known languages at a d12+2 skill level, the system can also learn new languages over time. Each day, roll a d6; on a 4+, the language is acquired at a d4 and can be further improved over time." compset="Cyberware">

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document signature="Hero Lab Data">
-	<!-- TCA: Tags specific to Rifts --> 
-	<thing id="fg5SL" name="Smart and Learned" description="Your hero adds one die type to Smarts and begins with a d6 in any three Smarts-linked skills." compset="Fortune" summary="Smarts +1 Die Type; d6 in three Smarts skills." uniqueness="unique">
-		<usesource source="SavRiftC"/>
-		<tag group="explicit" tag="5"/>
-		<eval phase="PreTraits" priority="5000">	
+  <!-- TCA: Tags specific to Rifts -->
+  <thing id="fg5SL" name="Smart and Learned" description="Your hero adds one die type to Smarts and begins with a d6 in any three Smarts-linked skills." compset="Fortune" summary="Smarts +1 Die Type; d6 in three Smarts skills." uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <tag group="explicit" tag="5"/>
+    <eval phase="PreTraits" priority="5000">
 			~Smarts +1 die Type
 			#traitcreation[attrSma] += 1
 			~+6 Skill Points
 			#resmax[resSkill] += 6
 		</eval>
-		<evalrule phase="Validate" priority="5000" message="Pick at least three Smarts-linked skills at d6" summary="Spend 5 Skill points on Healing, Investigation, and Knowledge skills.">
-			<![CDATA[
+    <evalrule phase="Validate" priority="5000" message="Pick at least three Smarts-linked skills at d6" summary="Spend 5 Skill points on Healing, Investigation, and Knowledge skills."><![CDATA[
 		  var smartSkillCount as number
 		  smartSkillCount = 0
 
@@ -23,15 +22,13 @@
 			
 		  validif (smartSkillCount >= 3)
 		]]></evalrule>
-
-	</thing>
-	
-	  <thing id="und11Thief" name="Underworld: Thief" description="Your character is inherently gifted at larceny, possessing the Thief Edge without concern for requirements. He also gains +3 Skill Points to spend on Climbing, Lockpicking, and Stealth as he chooses." compset="HeroJrny">
+  </thing>
+  <thing id="und11Thief" name="Underworld: Thief" description="Your character is inherently gifted at larceny, possessing the Thief Edge without concern for requirements. He also gains +3 Skill Points to spend on Climbing, Lockpicking, and Stealth as he chooses." compset="HeroJrny">
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="Under"/>
     <bootstrap thing="edgThief">
       <autotag group="thing" tag="skipprereq"/>
-      </bootstrap>
+    </bootstrap>
     <eval phase="PreTraits" priority="5000">~+3 Skill Points
 #resmax[resSkill] += 3</eval>
     <evalrule phase="Validate" priority="5000" message="Spend 3 Skill Points to spend on Climbing, Lockpicking, and Stealth " summary="Spend 3 Skill Points to spend on Climbing, Lockpicking, and Stealth skills."><![CDATA[
@@ -45,5 +42,31 @@
         nexteach
 		
       validif (totalcount >= 3)]]></evalrule>
-    </thing>
+  </thing>
+  
+  <thing id="tra17Ace" name="Training: Ace" description="Though lots of folks can jump behind a wheel or grab a stick, your hero understands the nuances of guiding a machine effectively through the worst conditions. She gains the Ace Edge (if she already has Ace choose Training: Combat Ace), as well as a free die type increase in her choice of Boating, Driving, or Piloting." compset="HeroJrny">
+    <fieldval field="usrCandid1" value="thingid.skBoating|thingid.skDriving|thingid.skPiloting"/>
+    <usesource source="SavRiftC"/>
+    <tag group="RiftsHJ" tag="Train"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+	<bootstrap thing="edgAce">
+      <autotag group="thing" tag="skipprereq"/>
+    </bootstrap>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[
+	if (field[usrChosen1].ischosen <> 0) then
+      field[usrChosen1].chosen.field[trtBonus].value += 1
+	  endif]]></eval>
+  </thing>
+  
+  <thing id="tra17CAce" name="Training: Combat Ace" description="Though lots of folks can jump behind a wheel or grab a stick, your hero understands the nuances of guiding a machine effectively through the worst conditions. She gains the Combat Ace Edge (Since she already has Ace), as well as a free die type increase in her choice of Boating, Driving, or Piloting." compset="HeroJrny">
+    <fieldval field="usrCandid1" value="thingid.skBoating|thingid.skDriving|thingid.skPiloting"/>
+    <usesource source="SavRiftC"/>
+    <tag group="RiftsHJ" tag="Train"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+	<bootstrap thing="edgSRCAce"></bootstrap>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[
+	if (field[usrChosen1].ischosen <> 0) then
+      field[usrChosen1].chosen.field[trtBonus].value += 1
+	  endif]]></eval>
+  </thing>
 </document>

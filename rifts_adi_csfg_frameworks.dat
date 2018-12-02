@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+	<!-- TCA: Tags specific to Rifts --> 
+
+	<thing id="grpCSSoldier" name="M.A.R.S. (CS Soldier)" description="" compset="Group" uniqueness="unique">
+		<usesource source="csFightJoe"/>
+		
+		<tag group="Rifts" tag="MARS"/>
+		<bootstrap thing="skDriving"/>
+		<bootstrap thing="skFighting"/>
+		<bootstrap thing="skIntimid"/>
+		<bootstrap thing="skKnowElec"/>
+		<bootstrap thing="skNotice"/>
+		<bootstrap thing="skShooting"/>
+		<bootstrap thing="skSurvival"/>
+		<bootstrap thing="skThrowing"/>
+		<eval phase="PreTraits" priority="5000">
+			#resmax[resHeroJrn] += 1
+			#resmax[resFraSel1] += 1
+			perform hero.assign[Rifts.MARS]
+			~hero.childfound[resSkill].field[resSpent].value += 1
+			#resmax[resSkill] += 5
+		</eval>
+		
+		<eval phase="Render" priority="10000" index="4"><![CDATA[
+~set up chooser expressions for MOS Package
+var header as string
+header = "MOS Package: "
+header &= hero.child[resFraSel1].field[resSummary].text
+hero.child[ehExprHlp1].field[ehFrameAdd].text = "Select MOS package"
+hero.child[ehExprHlp1].field[ehFrameExp].text = "CSMOS.?"
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]>
+		</eval>
+		<evalrule phase="Final" priority="1000" message="May only select one MOS."><![CDATA[validif (hero.tagcount[CSMOS.?]<= 1)]]></evalrule>
+    </thing>
+	
+	
+	<thing id="edgCSMOSInfantry" name="CS Infantryman" description="This is your typical grunt soldier: Tough, ready for any action, and skilled in a wide variety of death, these soldiers are the basis of the army.\nM.O.S Skills: Shooting+3, Fighting+1, Throwing+1, Notice+1\nEdges: Two combat edges of choice." compset="Edge" isunique="yes">
+		<usesource source="csFightJoe"/>
+		<tag group="MinRank" tag="0"/>
+		<tag group="EdgeType" tag="Background"/>
+		<tag group="CSMOS" tag="Infantry"/>
+		<eval phase="Setup" priority="3000" index="2">		
+			#resmax[resFraSel2] += 2
+			perform hero.assign[CSMOS.Infantry]
+		</eval>
+		
+		<eval phase="Render" priority="10000" index="5"><![CDATA[
+var header as string
+header = "Combat Edge: "
+header &= hero.child[resFraSel2].field[resSummary].text
+
+~set up chooser expressions for bonus edges
+hero.child[ehExprHlp2].field[ehFrameAdd].text = "Add Combat Edge"
+hero.child[ehExprHlp2].field[ehFrameExp].text = "EdgeType.Combat"
+hero.child[ehExprHlp2].field[ehFrameHdr].text = header]]>
+		</eval>
+		<exprreq message="Must be a CS Soldier."><![CDATA[(hero.tagcount[Group.grpCSSoldier]) = 1]]></exprreq>
+    </thing>
+	
+	<thing id="edgCSMOSCQB" name="CS Close Quarters Battle Specialist" description="Trained in close combat, these specialists are the bunker clearers, the first into insurgent houses, and generally considered second only to Commandos in terms of being bad-ass. They also have one of the higher fatality rates, because of this. Still, combat junkies and heroes alike clamor for the chance to become part of their ranks.\nM.O.S Skills: Fighting+3, Shooting+1, Throwing+1, Notice+1\nEdges: Two combat edges of choice." compset="Edge" isunique="yes">
+		<usesource source="csFightJoe"/>
+		<tag group="MinRank" tag="0"/>
+		<tag group="EdgeType" tag="Background"/>
+		<tag group="CSMOS" tag="CQB"/>
+		<eval phase="Setup" priority="3000" index="2">		
+			#resmax[resFraSel2] += 2
+			perform hero.assign[CSMOS.CQB]
+		</eval>
+		
+		<eval phase="Render" priority="10000" index="5"><![CDATA[
+var header as string
+header = "Combat Edge: "
+header &= hero.child[resFraSel2].field[resSummary].text
+
+~set up chooser expressions for bonus edges
+hero.child[ehExprHlp2].field[ehFrameAdd].text = "Add Combat Edge"
+hero.child[ehExprHlp2].field[ehFrameExp].text = "EdgeType.Combat"
+hero.child[ehExprHlp2].field[ehFrameHdr].text = header]]>
+		</eval>
+		
+		<exprreq message="Must be a CS Soldier."><![CDATA[(hero.tagcount[Group.grpCSSoldier]) = 1]]></exprreq>
+    </thing>
+
+	
+	<thing id="edgCSMOSForObs" name="CS Forward Observer" description="Part of the Ranger Corps, forward observers help artillery and air strikes to be more precise. They also prevent aircraft from dropping ordinance on friendly forces.\nAdds one die type to Vigor.\nM.O.S Skills:  K/Electronics+2, Notice+2, Stealth+2 \nEdges: Woodsman, Spotter.\n\nBegins with a hand held Nightvision Targeting Scope that can link to a radio to transmit targeting information (K/Electronics to use)." compset="Edge" isunique="yes">
+		<usesource source="csFightJoe"/>
+		<tag group="MinRank" tag="0"/>
+		<tag group="EdgeType" tag="Background"/>
+		<tag group="CSMOS" tag="ForwardObserver"/>
+		<bootstrap thing="edgMarksmn">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<bootstrap thing="edgSRCSFGSpot"/>
+		<eval phase="PreTraits" priority="5001"><![CDATA[
+			perform hero.assign[CSMOS.ForwardObserver]
+			#traitcreation[attrVig] += 1
+		]]>
+		</eval>
+
+		<exprreq message="Must be a CS Soldier."><![CDATA[(hero.tagcount[Group.grpCSSoldier]) = 1]]></exprreq>
+		<exprreq message="Smarts d8 required."><![CDATA[#trait[attrSma] >= 4]]></exprreq>
+    </thing>
+	
+	
+	<thing id="edgCSMOSTargAcq" name="CS Target Acquisition Group" description="Part of the Ranger Corps, TAG operatives are often sent alone, or in small groups. These deadly, yet silent men and women are the stuff of legends among the Coalition’s enemies. “Silent Souls leave Laser Holes” is their unofficial motto, and CS propaganda movies and games have made the often boring jobs of these unsung heroes seem like a vibrant choice for many grunts coming into training. Their long and brutal training weeds out those unsuited to the work.\nM.O.S Skills:  Shooting+2, Stealth+2, Survival+2 \nEdges: Marksman, Trademark Weapon." compset="Edge" isunique="yes">
+		<usesource source="csFightJoe"/>
+		<tag group="MinRank" tag="0"/>
+		<tag group="EdgeType" tag="Background"/>
+		<tag group="CSMOS" tag="TargAcq"/>
+		<bootstrap thing="edgMarksmn">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<bootstrap thing="edgTrmark">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<eval phase="PreTraits" priority="5001"><![CDATA[
+			perform hero.assign[CSMOS.TargAcq]
+		]]>
+		</eval>
+
+		<exprreq message="Must be a CS Soldier."><![CDATA[(hero.tagcount[Group.grpCSSoldier]) = 1]]></exprreq>
+    </thing>
+
+	<thing id="edgCSMOSAirSup" name="CS Aerial Support Power Armor Pilot" description="The face of the Coalition, it is the SAMAS and its variants that cause a cheer to erupt among infantry when they zoom in for Close Air Support. SAMAS are usually attached at either platoon or company level.\nM.O.S Skills:  Piloting+3, Notice+1, Shooting+1, K/Electronics+1\nEdges: Ace, Power Armor Jock" compset="Edge" isunique="yes">
+		<usesource source="csFightJoe"/>
+		<tag group="MinRank" tag="0"/>
+		<tag group="EdgeType" tag="Background"/>
+		<tag group="CSMOS" tag="AerialSupport"/>
+		<bootstrap thing="edgAce">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<bootstrap thing="edgSRPAJo">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<eval phase="PreTraits" priority="5001"><![CDATA[perform hero.assign[CSMOS.AerialSupport]]]>
+		</eval>
+		
+	
+		<exprreq message="Must be a CS Soldier."><![CDATA[(hero.tagcount[Group.grpCSSoldier]) = 1]]></exprreq>
+		<exprreq message="Agility d8 required."><![CDATA[#trait[attrAgi] >= 4]]></exprreq>
+    </thing>
+
+	<thing id="edgCSMOSGrndSup" name="CS Ground Support Power Armor Pilot" description="While the SAMAS is the face of the Coalition, it is armor like the TIMAS, the Mauler, and later the Terror Trooper that infantry see more often. Pilots of this caliber are used to augment infantry platoons with the enhanced firepower power armor can bring to the table.\nM.O.S Skills:  Piloting+2, Notice+1, Shooting+2, K/Electronics+1\nEdges: Ace, Power Armor Jock" compset="Edge" isunique="yes">
+		<usesource source="csFightJoe"/>
+		<tag group="MinRank" tag="0"/>
+		<tag group="EdgeType" tag="Background"/>
+		<tag group="CSMOS" tag="GroundSupport"/>
+		<bootstrap thing="edgRckRoll">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<bootstrap thing="edgSRPAJo">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<eval phase="PreTraits" priority="5001"><![CDATA[perform hero.assign[CSMOS.GroundSupport]]]></eval>
+		<exprreq message="Must be a CS Soldier."><![CDATA[(hero.tagcount[Group.grpCSSoldier]) = 1]]></exprreq>
+    </thing>
+	
+	<thing id="edgCSMOSPsychic" name="CS Psychic Soldiers" description="Whether they are human dominators, psi-nullifiers, or bursters, CS psychics undergo intense training which integrates them into the military and focuses their potential. The type of psychic is determined mostly by power choice.\nM.O.S Skills:  Psionics +3, Notice+1, Shooting+1, Intimidation+1  \nEdges: Arcane Background: Psionics (Same power list as Mind Melter) and three powers, Major Psionic" compset="Edge" isunique="yes">
+		<usesource source="csFightJoe"/>
+		<tag group="MinRank" tag="0"/>
+		<tag group="EdgeType" tag="Background"/>
+		<tag group="CSMOS" tag="Psychic"/>
+		<bootstrap thing="edgArcPsi"></bootstrap>
+		<bootstrap thing="edgSRMajorPsionic">
+			<autotag group="thing" tag="skipprereq"/>
+		</bootstrap>
+		<eval phase="PreTraits" priority="5001"><![CDATA[perform hero.assign[CSMOS.Psychic]]]></eval>
+		<exprreq message="Must be a CS Soldier."><![CDATA[(hero.tagcount[Group.grpCSSoldier]) = 1]]></exprreq>
+    </thing>
+	</document>

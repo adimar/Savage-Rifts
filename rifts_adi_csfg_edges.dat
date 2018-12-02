@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+	<!-- TCA: Tags specific to Rifts --> 
+
+	<thing id="edgSRCSFGSpot" name="Spotter" description="This hero has a special knack for calling in supporting fire, and can make all the difference in the world when trying to break an enemy assault. A character with this edge can shift the target point of artillery up to 20” per round without delay (instead of the usual 10”). In addition, the deviation for any air strikes this character calls in are halved (rounding down)." compset="Edge" summary="This hero has a special knack for calling in supporting fire">
+		<usesource source="csFightJoe"/>
+		<tag group="MinRank" tag="2"/>
+		<tag group="EdgeType" tag="Profession"/>
+		<exprreq message="Smarts d8 required."><![CDATA[#trait[attrSma] >= 4]]></exprreq>
+	</thing>
+	
+	
+</document>
